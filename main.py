@@ -49,6 +49,58 @@ class Duckisite:
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         win.blit(self.img, self.rect)
 
+class DuckisiteBlue:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.width = 20
+        self.height = 20
+        self.xgoal = random.randint(1,800)
+        self.ygoal = random.randint(1,800)
+        self.speed = 0.1
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.img = pygame.image.load("DuckisiteBlue.png")
+        self.img = pygame.transform.scale(self.img, (self.width, self.height))
+        Duckisite.ducks.append(self)
+    def tick(self, win):
+
+        self.goal = pygame.math.Vector2(self.xgoal,self.ygoal)
+        self.pos = pygame.math.Vector2(self.x,self.y)
+        self.x,self.y = pygame.math.Vector2.lerp(self.pos,self.goal,self.speed)
+
+        if random.randint(0,5) == 5:
+            self.xgoal = random.randint(1, 800)
+            self.ygoal = random.randint(1, 800)
+
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        win.blit(self.img, self.rect)
+
+class DuckisiteAbomination:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.width = 45
+        self.height = 45
+        self.xgoal = random.randint(1,800)
+        self.ygoal = random.randint(1,800)
+        self.speed = 0.003
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.img = pygame.image.load("DuckisiteAbomination.png")
+        self.img = pygame.transform.scale(self.img, (self.width, self.height))
+        Duckisite.ducks.append(self)
+    def tick(self, win):
+
+        self.goal = pygame.math.Vector2(self.xgoal,self.ygoal)
+        self.pos = pygame.math.Vector2(self.x,self.y)
+        self.x,self.y = pygame.math.Vector2.lerp(self.pos,self.goal,self.speed)
+
+        if random.randint(0,10) == 10:
+            self.xgoal = random.randint(1, 800)
+            self.ygoal = random.randint(1, 800)
+
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        win.blit(self.img, self.rect)
+
 class DuckisiteHeavy:
     def __init__(self,x,y):
         self.x = x
