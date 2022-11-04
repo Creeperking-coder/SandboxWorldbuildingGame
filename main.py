@@ -57,7 +57,7 @@ class DuckisiteBlue:
         self.height = 20
         self.xgoal = random.randint(1,800)
         self.ygoal = random.randint(1,800)
-        self.speed = 0.1
+        self.speed = 0.05
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.img = pygame.image.load("DuckisiteBlue.png")
         self.img = pygame.transform.scale(self.img, (self.width, self.height))
@@ -94,7 +94,7 @@ class DuckisiteAbomination:
         self.pos = pygame.math.Vector2(self.x,self.y)
         self.x,self.y = pygame.math.Vector2.lerp(self.pos,self.goal,self.speed)
 
-        if random.randint(0,10) == 10:
+        if random.randint(0,20) == 10:
             self.xgoal = random.randint(1, 800)
             self.ygoal = random.randint(1, 800)
 
@@ -162,7 +162,13 @@ class DuckisiteRoom:
                 Duckisite.ducks.remove(self.upgrading)
                 Duckisite.swarmducks.remove(self.upgrading)
                 self.upgrading = None
-
+                self.type = random.randint(0,2)
+                if self.type == 0:
+                    d = DuckisiteHeavy
+                elif self.type == 1:
+                    d = DuckisiteBlue
+                elif self.type == 2:
+                    d = DuckisiteBuilder
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         win.blit(self.img, self.rect)
@@ -291,7 +297,7 @@ class DuckisitePod:
         Duckisite.ducks.append(self)
     def tick(self, win):
 
-        if random.randint(0,100) == 0:
+        if random.randint(0,500) == 0:
             Duckisite.ducks.remove(self)
             d = Duckisite(self.x,self.y)
             d = Duckisite(self.x, self.y)
@@ -549,6 +555,29 @@ while run == True:
         r.tick(win)
     for d in Duckisite.ducks:
         d.tick(win)
+
+    if len(Duckisite.swarmducks)>=100:
+        d1 = Duckisite.swarmducks[10]
+        d2 = Duckisite.swarmducks[5]
+        d3 = Duckisite.swarmducks[50]
+        d4 = Duckisite.swarmducks[30]
+        d1.ygoal = 400
+        d1.xgoal = 400
+        d2.ygoal = 400
+        d2.xgoal = 400
+        d3.ygoal = 400
+        d3.xgoal = 400
+        d4.ygoal = 400
+        d4.xgoal = 400
+
+        if d1.rect.colliderect(d2.rect)==True:
+            if d1.rect.colliderect(d3.rect)==True:
+                if d1.rect.colliderect(d4.rect)==True:
+                    Duckisite.swarmducks.remove(d1)
+                    Duckisite.swarmducks.remove(d2)
+                    Duckisite.swarmducks.remove(d3)
+                    Duckisite.swarmducks.remove(d4)
+                    a = DuckisiteAbomination
 
     pygame.display.update()
 
