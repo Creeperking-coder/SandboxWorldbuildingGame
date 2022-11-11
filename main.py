@@ -101,6 +101,34 @@ class DuckisiteAbomination:
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         win.blit(self.img, self.rect)
 
+class DuckisiteBlob:
+    blobs=[]
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.width = 15
+        self.height = 15
+        self.xgoal = random.randint(1,800)
+        self.ygoal = random.randint(1,800)
+        self.speed = 0.005
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.img = pygame.image.load("DuckisiteBlob.png")
+        self.img = pygame.transform.scale(self.img, (self.width, self.height))
+        Duckisite.ducks.append(self)
+        DuckisiteBlob.blobs.append(self)
+    def tick(self, win):
+
+        self.goal = pygame.math.Vector2(self.xgoal,self.ygoal)
+        self.pos = pygame.math.Vector2(self.x,self.y)
+        self.x,self.y = pygame.math.Vector2.lerp(self.pos,self.goal,self.speed)
+
+        if random.randint(0,20) == 10:
+            self.xgoal = random.randint(1, 800)
+            self.ygoal = random.randint(1, 800)
+
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        win.blit(self.img, self.rect)
+
 class DuckisiteHeavy:
     def __init__(self,x,y):
         self.x = x
@@ -166,9 +194,9 @@ class DuckisiteRoom:
                 if self.type == 0:
                     d = DuckisiteHeavy
                 elif self.type == 1:
-                    d = DuckisiteBlue
-                elif self.type == 2:
                     d = DuckisiteBuilder
+                elif self.type==2:
+                    d = DuckisiteBlue
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         win.blit(self.img, self.rect)
@@ -303,9 +331,11 @@ class DuckisitePod:
             d = Duckisite(self.x, self.y)
             d = Duckisite(self.x, self.y)
             d = Duckisite(self.x, self.y)
-            d = DuckisiteHeavy(self.x, self.y)
-            d = DuckisiteHeavy(self.x, self.y)
             d = DuckisiteBuilder(self.x, self.y)
+            d = DuckisiteBuilder(self.x, self.y)
+            d = DuckisiteBuilder(self.x, self.y)
+            d = DuckisiteBuilder(self.x, self.y)
+
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         win.blit(self.img, self.rect)
@@ -341,7 +371,7 @@ class MotherDuckisite:
             if random.randint(0,5) != 0:
                 e = DuckisiteEgg(self.x,self.y,0)
             else:
-                e = DuckisiteEgg(self.x,self.y,random.randint(0,2))
+                e = DuckisiteEgg(self.x,self.y,random.randint(1,2))
 
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
@@ -556,19 +586,19 @@ while run == True:
     for d in Duckisite.ducks:
         d.tick(win)
 
-    if len(Duckisite.swarmducks)>=100:
-        d1 = Duckisite.swarmducks[10]
+    if len(Duckisite.swarmducks)>=50:
+        d1 = Duckisite.swarmducks[1]
         d2 = Duckisite.swarmducks[5]
-        d3 = Duckisite.swarmducks[50]
+        d3 = Duckisite.swarmducks[12]
         d4 = Duckisite.swarmducks[30]
-        d1.ygoal = 400
-        d1.xgoal = 400
-        d2.ygoal = 400
-        d2.xgoal = 400
-        d3.ygoal = 400
-        d3.xgoal = 400
-        d4.ygoal = 400
-        d4.xgoal = 400
+        d1.ygoal = d1.y
+        d1.xgoal = d1.x
+        d2.ygoal = d1.y
+        d2.xgoal = d1.x
+        d3.ygoal = d1.y
+        d3.xgoal = d1.x
+        d4.ygoal = d1.y
+        d4.xgoal = d1.x
 
         if d1.rect.colliderect(d2.rect)==True:
             if d1.rect.colliderect(d3.rect)==True:
@@ -577,7 +607,37 @@ while run == True:
                     Duckisite.swarmducks.remove(d2)
                     Duckisite.swarmducks.remove(d3)
                     Duckisite.swarmducks.remove(d4)
-                    a = DuckisiteAbomination
+                    Duckisite.ducks.remove(d1)
+                    Duckisite.ducks.remove(d2)
+                    Duckisite.ducks.remove(d3)
+                    Duckisite.ducks.remove(d4)
+                    a = DuckisiteBlob(d1.x,d1.y)
+
+    if len(DuckisiteBlob.blobs) >= 5:
+        d1 = DuckisiteBlob.blobs[1]
+        d2 = DuckisiteBlob.blobs[2]
+        d3 = Duckisite.swarmducks[3]
+        d4 = Duckisite.swarmducks[4]
+        d1.ygoal = d1.y
+        d1.xgoal = d1.x
+        d2.ygoal = d1.y
+        d2.xgoal = d1.x
+        d3.ygoal = d1.y
+        d3.xgoal = d1.x
+        d4.ygoal = d1.y
+        d4.xgoal = d1.x
+        if d1.rect.colliderect(d2.rect) == True:
+            if d1.rect.colliderect(d3.rect) == True:
+                if d1.rect.colliderect(d4.rect) == True:
+                    DuckisiteBlob.blobs.remove(d1)
+                    DuckisiteBlob.blobs.remove(d2)
+                    DuckisiteBlob.blobs.remove(d3)
+                    DuckisiteBlob.blobs.remove(d4)
+                    Duckisite.ducks.remove(d1)
+                    Duckisite.ducks.remove(d2)
+                    Duckisite.ducks.remove(d3)
+                    Duckisite.ducks.remove(d4)
+                    a = DuckisiteAbomination(d1.x, d1.y)
 
     pygame.display.update()
 
