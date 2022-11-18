@@ -1,5 +1,6 @@
 import pygame
 import random
+import numpy as np
 
 pygame.init()
 
@@ -14,11 +15,63 @@ dull_red = (150,50,50)
 green = (0,255,0)
 blue = (0,0,255)
 grey = (129,126,130)
+brown = (51,0,0)
 
 #teams
 redT = []
 greenT = []
 nutralT = []
+
+class SINbot:
+    sinbots = []
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.y2 = y
+        self.size = 5
+        self.Fs = 1000
+        self.f = 5
+        self.a = 20
+        self.s = 5
+        self.l = self.x
+        self.rect = (self.x,self.y,self.size,self.size)
+        SINbot.sinbots.append(self)
+    def tick(self):
+
+        self.l += self.s
+        self.y = self.a * np.sin(2 * np.pi * self.f * self.l / self.Fs)
+        self.y += self.y2
+
+        self.rect = (self.x, self.y, self.size, self.size)
+        pygame.draw.rect(win,red,self.rect)
+
+class Worm:
+    worms = []
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.width = 16
+        self.height = 8
+        self.xgoal = random.randint(1, 800)
+        self.ygoal = random.randint(1, 800)
+        self.speed = 0.0005
+        self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
+        self.img = pygame.image.load("Worm.png")
+        self.img = pygame.transform.scale(self.img, (self.width, self.height))
+        Worm.worms.append(self)
+    def tick(self):
+
+        self.goal = pygame.math.Vector2(self.xgoal, self.ygoal)
+        self.pos = pygame.math.Vector2(self.x, self.y)
+        self.x, self.y = pygame.math.Vector2.lerp(self.pos, self.goal, self.speed)
+
+        if random.randint(0, 10) == 10:
+            self.xgoal = random.randint(1, 800)
+            self.ygoal = random.randint(1, 800)
+
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        win.blit(self.img,self.rect)
+
 
 class Duckisite:
     ducks = []
@@ -564,7 +617,15 @@ class RedSpotter:
 # r = RedMortar(200,700)
 # l = RedSpotter(500,500)
 
-m = MotherDuckisite(400,400)
+#m = MotherDuckisite(400,400)
+
+#w = Worm(400,400)
+
+# for i in range(100):
+#     s = SINbot(i*5,100)
+
+# for i in range(100):
+#     s = SINbot(random.randint(0,800),random.randint(0,800))
 
 run = True
 while run == True:
@@ -585,6 +646,10 @@ while run == True:
         r.tick(win)
     for d in Duckisite.ducks:
         d.tick(win)
+    for w in Worm.worms:
+        w.tick()
+    for s in SINbot.sinbots:
+        s.tick()
 
     if len(Duckisite.swarmducks)>=50:
         d1 = Duckisite.swarmducks[1]
