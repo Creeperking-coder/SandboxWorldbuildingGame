@@ -624,8 +624,8 @@ class RedSpotter:
 # for i in range(100):
 #     s = SINbot(i*5,100)
 
-# for i in range(100):
-#     s = SINbot(random.randint(0,800),random.randint(0,800))
+#for i in range(100):
+#    s = SINbot(i*10,400)
 
 run = True
 while run == True:
@@ -705,15 +705,4 @@ while run == True:
                     a = DuckisiteAbomination(d1.x, d1.y)
 
     pygame.display.update()
-
-
-
-
-
-
-
-
-
-
-
 
